@@ -22,6 +22,6 @@ $(LIBDIR)/$(LIB):
 	$(CC) $(CFLAGS) $<
 
 clean:
-	rm $(ofiles) $(exefiles) *.png
+	rm $(ofiles) $(exefiles) *.png *.jpg
 
 .PHONY: all clean $(LIB)

@@ -4,6 +4,67 @@
 #include <jpeglib.h>
 #include "timg.h"
 
+timg_t *timg_readjpeg(const char *fname) {
+  
+  struct jpeg_decompress_struct cinfo;
+  struct jpeg_error_mgr jerr;
+  cinfo.err = jpeg_std_error(&jerr);
+  jpeg_create_decompress(&cinfo);
+  
+  FILE *infile;
+  if((infile = fopen(fname, "r")) == NULL) {
+    fprintf(stderr, "Could not open %s\n", fname);
+    exit(1);
+  }
+
+  jpeg_stdio_src(&cinfo, infile);
+  
+  jpeg_read_header(&cinfo, TRUE);
+  
+  jpeg_start_decompress(&cinfo);
+
+  int w = cinfo.output_width;
+  int h = cinfo.output_height;
+  int nComps = cinfo.output_components;
+  
+  //initialize timg object
+  timg_t *img = timg_create(h,w);
+  
+  uint8_t *buf = (uint8_t*)malloc(w*nComps);
+  JSAMPROW row_ptr[1];
+  while(cinfo.output_scanline < cinfo.image_height) {
+    row_ptr[0] = buf;
+    int r = cinfo.output_scanline;
+    jpeg_read_scanlines(&cinfo, row_ptr, 1);
+
+    int c;
+    for(c=0; c<w; ++c) {
+      if(nComps == 1) { //grayscale
+	timg_pixelat(img, r, c)->r = buf[c];
+	timg_pixelat(img, r, c)->g = buf[c];
+	timg_pixelat(img, r, c)->b = buf[c];
+	timg_pixelat(img, cinfo.output_scanline, c)->a = 255;
+      }
+      else if(nComps == 3) { //RGB
+	timg_pixelat(img, r, c)->r = buf[nComps*c + 0];
+	timg_pixelat(img, r, c)->g = buf[nComps*c + 1];
+	timg_pixelat(img, r, c)->b = buf[nComps*c + 2];
+	timg_pixelat(img, r, c)->a = 255;
+      }
+      else {
+	fprintf(stderr, "timg_readjpeg: Neither 1 nor three color components. Something wrong.\n");
+	exit(1);
+      }
+    }
+  }
+
+  jpeg_finish_decompress(&cinfo);
+  fclose(infile);
+  jpeg_destroy_decompress(&cinfo);
+
+  return img;
+}
+
 void timg_writejpeg(const char *fname, timg_t *img) {
 
   struct jpeg_compress_struct cinfo;
