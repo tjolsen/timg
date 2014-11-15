@@ -28,5 +28,8 @@ pixel_t *timg_pixelat(timg_t *img, int row, int col);
 timg_t *timg_readpng(const char *fname);
 void timg_writepng(const char *fname, timg_t *img);
 
+//jpeg i/o
+timg_t *timg_readjpeg(const char *fname);
+void timg_writejpeg(const char *fname, timg_t *img);
 
 #endif
