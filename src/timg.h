@@ -32,4 +32,8 @@ void timg_writepng(const char *fname, timg_t *img);
 timg_t *timg_readjpeg(const char *fname);
 void timg_writejpeg(const char *fname, timg_t *img);
 
+//tiff i/o
+timg_t *timg_readtiff(const char *fname);
+void timg_writetiff(const char *fname, timg_t *img);
+
 #endif
