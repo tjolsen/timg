@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <inttypes.h>
+#include <string.h>
 #include "timg.h"
 
 
@@ -39,6 +40,50 @@ timg_t *timg_readtiff(const char *fname) {
 
 void timg_writetiff(const char *fname, timg_t *img) {
   
+  TIFF *tif = TIFFOpen(fname, "w");
   
+  if(tif == 0) {
+    fprintf(stderr, "timg_writetiff: Failed to open %s\n", fname);
+    exit(1);
+  }
+
+  int w = img->width;
+  int h = img->height;
   
+  TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, w);
+  TIFFSetField(tif, TIFFTAG_IMAGELENGTH, h);
+  TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 4);
+  TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 8);
+  TIFFSetField(tif, TIFFTAG_ORIENTATION, ORIENTATION_TOPLEFT);
+  TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
+  TIFFSetField(tif, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_RGB);
+  
+  int linebytes = 4*w;
+  
+  unsigned char *buf = NULL;
+  
+  if(TIFFScanlineSize(tif) == linebytes) {
+    buf = (unsigned char*)_TIFFmalloc(linebytes);
+  } else {
+    buf = (unsigned char*)_TIFFmalloc(TIFFScanlineSize(tif));
+  }
+
+  if(buf == NULL) {
+    fprintf(stderr, "timg_writetiff: failed to allocate buf");
+    exit(1);
+  }
+
+  TIFFSetField(tif,TIFFTAG_ROWSPERSTRIP, TIFFDefaultStripSize(tif, w*4));
+
+  int row=0;
+  for(row=0; row<h; ++row) {
+    //memcpy(buf, timg_pixelat(img, row, 0), linebytes);
+    if(TIFFWriteScanline(tif, &(img->pixels[row*img->width]), row, 0) < 0)
+      break;
+  }
+
+  if(buf)
+    _TIFFfree(buf);
+
+  TIFFClose(tif);
 }

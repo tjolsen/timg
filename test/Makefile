@@ -2,18 +2,17 @@ cfiles = $(shell ls *.c)
 ofiles = $(cfiles:.c=.o)
 exefiles = $(cfiles:.c=.exe)
 
-LIB = ../lib/libtimg.a
+LIB = libtimg.a
 LIBDIR = ../lib/
 CFLAGS = -I../src/ -O3 -march=native -c -Wall
-LFLAGS = -L$(LIBDIR) -ltimg -lpng -ljpeg
+LFLAGS = -L$(LIBDIR) -ltimg -lpng -ljpeg -ltiff
 
 CC = gcc
 
 all: $(LIBDIR)/$(LIB) $(exefiles)
-	echo $(exefiles)
 
 $(LIBDIR)/$(LIB):
-	$(MAKE) -C .. lib
+	$(MAKE) -C .. lib/$(LIB)
 
 %.exe: %.o 
 	$(CC) -o $@ $< $(LFLAGS)
@@ -22,6 +21,6 @@ $(LIBDIR)/$(LIB):
 	$(CC) $(CFLAGS) $<
 
 clean:
-	rm $(ofiles) $(exefiles) *.png *.jpg
+	rm $(ofiles) $(exefiles) *.png *.jpg *.tiff *.tif
 
 .PHONY: all clean $(LIB)

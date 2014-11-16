@@ -16,7 +16,6 @@ test: lib/$(lib)
 	$(MAKE) -C $@
 
 clean:
-	for dir in $(subdirs); do $(MAKE) -C $$dir clean; done
-	rm lib/$(lib)
+	rm lib/$(lib); for dir in $(subdirs); do $(MAKE) -C $$dir clean; done; 
 
 .PHONY: $(subdirs) clean all
