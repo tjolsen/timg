@@ -13,10 +13,11 @@ still abstracting away the complexities of interfacing with format-specific
 libraries like libpng.
 
 The data structures that have been defined are:
-    * pixel_t: a struct consisting of four unsigned character members {r, g, b, a},
-    which correspond to the RGBA channels of the pixel.
-    * timg_t: a struct containing a pointer to an array of pixel_t's, an integer
-    for the image height, and an integer for the image width {pixel_t *pixels, int height, int width}
+
+* pixel_t: a struct consisting of four unsigned character members {r, g, b, a},
+which correspond to the RGBA channels of the pixel.
+* timg_t: a struct containing a pointer to an array of pixel_t's, an integer
+for the image height, and an integer for the image width {pixel_t *pixels, int height, int width}
 
 Creation and destruction of a timg_t object should be done via the timg_create() and timg_destroy()
 functions in order to ensure proper memory management (nothing fancy, just malloc and free).
@@ -29,6 +30,7 @@ Timg interfaces with 3rd party open-source libraries to read and write
 images to disk. They require the development packages,and  can be installed
 with your system's package manager.
 Dependancies: 
-	      *libpng-dev
-	      *libjpeg-dev
-	      *libtiff5-dev
+
+*libpng-dev
+*libjpeg-dev
+*libtiff5-dev
