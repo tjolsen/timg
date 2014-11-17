@@ -31,6 +31,6 @@ images to disk. They require the development packages,and  can be installed
 with your system's package manager.
 Dependancies: 
 
-*libpng-dev
-*libjpeg-dev
-*libtiff5-dev
+* libpng-dev
+* libjpeg-dev
+* libtiff5-dev
