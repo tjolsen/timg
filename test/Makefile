@@ -5,7 +5,7 @@ exefiles = $(cfiles:.c=.exe)
 LIB = libtimg.a
 LIBDIR = ../lib/
 CFLAGS = -I../src/ -O3 -march=native -c -Wall
-LFLAGS = -L$(LIBDIR) -ltimg -lpng -ljpeg -ltiff
+LFLAGS = -L$(LIBDIR) -ltimg -lm -lpng -ljpeg -ltiff
 
 CC = gcc
 
@@ -23,4 +23,4 @@ $(LIBDIR)/$(LIB):
 clean:
 	rm $(ofiles) $(exefiles) *.png *.jpg *.tiff *.tif
 
-.PHONY: all clean $(LIB)
+.PHONY: all clean $(LIBDIR)/$(LIB)

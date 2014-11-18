@@ -59,7 +59,7 @@ void timg_destroy(timg_t *img) {
 pixel_t *timg_pixelat(timg_t *img, int row, int col) {
 
   if(row >= img->height || col >= img->width || row<0 || col<0) {
-    perror("Error: timg_pixelat: attempted to index outside image");
+    fprintf(stderr,"Error: timg_pixelat: attempted to index outside image");
     exit(1);
   }
 
