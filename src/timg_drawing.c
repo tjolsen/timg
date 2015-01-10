@@ -59,7 +59,7 @@ void timg_drawCircle(timg_t *img, int ro, int co, int R, pixel_t p) {
   for(r=ro-R; r<=ro+R; ++r) {
     if(r<0 || r>=img->height)
       continue;
-    
+
     int dr = ro-r;
     
     double dc = sqrt(((double)(R*R - dr*dr)));
