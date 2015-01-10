@@ -3,6 +3,10 @@
 
 #include <inttypes.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct {
   uint8_t r,g,b,a;
 } pixel_t;
@@ -35,5 +39,9 @@ void timg_writejpeg(const char *fname, timg_t *img);
 //tiff i/o
 timg_t *timg_readtiff(const char *fname);
 void timg_writetiff(const char *fname, timg_t *img);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
