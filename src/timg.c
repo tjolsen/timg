@@ -1,6 +1,8 @@
 #include "timg.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <ctype.h>
+#include <string.h>
 
 timg_t *timg_createfromval(int h, int w, pixel_t val) {
   
@@ -67,4 +69,69 @@ pixel_t *timg_pixelat(timg_t *img, int row, int col) {
 
   return &(img->pixels[index]);
 }
+
+timg_t *timg_read(const char *fname) {
+  
+  char cap_fname[128];
+  memset(cap_fname, '\0', 128);
+  unsigned N = strnlen(fname, 127);
+  
+  unsigned i;
+  for(i=0; i<N; ++i) {
+    cap_fname[i] = (char)toupper(fname[i]);
+  }
+
+  //check file extensions
+  // png/PNG
+  if(strcmp(&(cap_fname[N-3]), "PNG")==0) {
+    return timg_readpng(fname);
+  }
+
+  //jpg/JPG/jpeg/JPEG
+  if(strcmp(&(cap_fname[N-3]), "JPG")==0 ||
+     strcmp(&(cap_fname[N-4]), "JPEG")==0) {
+    return timg_readjpeg(fname);
+  }
+
+  //tif/TIF/tiff/TIFF
+  if(strcmp(&(cap_fname[N-3]), "TIF")==0 ||
+     strcmp(&(cap_fname[N-4]), "TIFF")==0) {
+    return timg_readtiff(fname);
+  }
+
+
+  return NULL;
+}
+
+void timg_write(const char *fname, timg_t *img) {
+  
+  char cap_fname[128];
+  memset(cap_fname, '\0', 128);
+  unsigned N = strnlen(fname, 127);
+  
+  unsigned i;
+  for(i=0; i<N; ++i) {
+    cap_fname[i] = (char)toupper(fname[i]);
+  }
+
+  //check file extensions
+  // png/PNG
+  if(strcmp(&(cap_fname[N-3]), "PNG")==0) {
+    timg_writepng(fname,img);
+  }
+
+  //jpg/JPG/jpeg/JPEG
+  if(strcmp(&(cap_fname[N-3]), "JPG")==0 ||
+     strcmp(&(cap_fname[N-4]), "JPEG")==0) {
+    timg_writejpeg(fname,img);
+  }
+
+  //tif/TIF/tiff/TIFF
+  if(strcmp(&(cap_fname[N-3]), "TIF")==0 ||
+     strcmp(&(cap_fname[N-4]), "TIFF")==0) {
+    timg_writetiff(fname,img);
+  }
+  
+}
+
 
