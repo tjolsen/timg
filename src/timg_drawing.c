@@ -64,6 +64,43 @@ void timg_drawCircle(timg_t *img, int ro, int co, int R, pixel_t p) {
     
     double dc = sqrt(((double)(R*R - dr*dr)));
     int idc = (int)(dc + 0.5); //easy way to round to nearest int
+    c = co - idc;
+    if(c>=0 && c<img->width)
+      *timg_pixelat(img,r,c) = p;
+    c = co + idc;
+    if(c>=0 && c<img->width)
+      *timg_pixelat(img,r,c) = p;
+  }
+
+  for(c = co-R; c<=co+R; ++c) {
+    if(c<0 || c>=img->width)
+      continue;
+    
+    int dc = co-c;
+    
+    double dr = sqrt(((double)(R*R - dc*dc)));
+    int idr = (int)(dr+0.5);
+    
+    r = ro - idr;
+    if(r>=0 && r < img->height)
+      *timg_pixelat(img,r,c) = p;
+
+    r = ro + idr;
+    if(r>=0 && r < img->height)
+      *timg_pixelat(img,r,c) = p;
+  }
+}
+
+void timg_drawFilledCircle(timg_t *img, int ro, int co, int R, pixel_t p) {
+  int r,c;
+  for(r=ro-R; r<=ro+R; ++r) {
+    if(r<0 || r>=img->height)
+      continue;
+
+    int dr = ro-r;
+    
+    double dc = sqrt(((double)(R*R - dr*dr)));
+    int idc = (int)(dc + 0.5); //easy way to round to nearest int
     for(c = co-idc; c<=co+idc; ++c) {
       if(c<0 || c>=img->width)
 	continue;
