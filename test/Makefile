@@ -1,4 +1,4 @@
-cfiles = $(shell ls *.c)
+cfiles = $(wildcard *.c)
 ofiles = $(cfiles:.c=.o)
 exefiles = $(cfiles:.c=.exe)
 
