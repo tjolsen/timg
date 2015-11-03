@@ -7,7 +7,7 @@ ARFLAGS = -r
 all: $(subdirs) lib/$(lib)
 
 lib/$(lib): src
-	ar $(ARFLAGS) $@ $(shell find src/ | grep .o$$)
+	ar $(ARFLAGS) $@ $(wildcard src/*.o)
 
 src:
 	$(MAKE) -C $@
